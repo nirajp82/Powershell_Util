@@ -14,3 +14,21 @@
 Import-Module posh-git
 Import-Module oh-my-posh
 Set-PoshPrompt -Theme Paradox
+
+
+*********
+Powershell Profile
+
+#Import the modules
+Import-Module -Name Terminal-Icons
+Import-Module posh-git
+Import-Module oh-my-posh
+#Set-PoshPrompt -Theme Paradox
+Set-PoshPrompt C:\Users\DEV\Documents\PowerShell\Themes\npatel.omp.json
+# Produce UTF-8 by default
+# https://news.ycombinator.com/item?id=12991690
+$PSDefaultParameterValues["Out-File:Encoding"] = "utf8"
+# bash-style completion
+Set-PSReadlineKeyHandler -Key Tab -Function Complete
+#Change directory
+#cd c:\bitbucket\cloud
