@@ -1,0 +1,16 @@
+#https://www.hanselman.com/blog/take-your-windows-terminal-and-powershell-to-the-next-level-with-terminal-icons
+>> Install-Module -Name Terminal-Icons -Repository PSGallery
+>> notepad++ $profile
+#Add following line.
+>> Import-Module -Name Terminal-Icons
+
+
+#https://www.hanselman.com/blog/how-to-make-a-pretty-prompt-in-windows-terminal-with-powerline-nerd-fonts-cascadia-code-wsl-and-ohmyposh
+>> Install-Module posh-git -Scope CurrentUser
+>> Install-Module oh-my-posh -Scope CurrentUser
+>> Install-Module -Name PSReadLine -AllowPrerelease -Scope CurrentUser -Force -SkipPublisherCheck
+>> notepad $PROFILE
+# Add these lines before Import-Module -Name Terminal-Icons
+Import-Module posh-git
+Import-Module oh-my-posh
+Set-PoshPrompt -Theme Paradox
