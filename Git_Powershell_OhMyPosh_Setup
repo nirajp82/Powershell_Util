@@ -41,7 +41,7 @@ $PSDefaultParameterValues["Out-File:Encoding"] = "utf8"
 # bash-style completion
 Set-PSReadlineKeyHandler -Key Tab -Function Complete
 #Change directory
-#cd c:\bitbucket\cloud
+#cd c:\source\projects
 
 
 # Font
