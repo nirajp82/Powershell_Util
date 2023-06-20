@@ -14,7 +14,9 @@
     + CategoryInfo          : ObjectNotFound: (oh-my-posh:String) [], CommandNotFoundException
     + FullyQualifiedErrorId : CommandNotFoundException
 
-  * For installation you have to install it via admin rights powershell - Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://ohmyposh.dev/install.ps1')) and not via Windows Store as it only installs on the CurrentUser privilege.
+  * For installation you have to install it via admin rights powershell - 
+  ` Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://ohmyposh.dev/install.ps1'))` 
+and not via Windows Store as it only installs on the CurrentUser privilege.
 
 >> Install-Module -Name PSReadLine -AllowPrerelease -Scope CurrentUser -Force -SkipPublisherCheck
 >> notepad $PROFILE
