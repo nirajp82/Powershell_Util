@@ -42,3 +42,9 @@ $PSDefaultParameterValues["Out-File:Encoding"] = "utf8"
 Set-PSReadlineKeyHandler -Key Tab -Function Complete
 #Change directory
 #cd c:\bitbucket\cloud
+
+
+# Font
+* https://github.com/microsoft/cascadia-code/releases
+* https://github.com/nirajp82/cascadia-code
+
