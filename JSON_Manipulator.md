@@ -91,3 +91,34 @@ $jsonArray
 # Write the updated JSON array back to the file
 Write-JsonFile -filePath $filePath -jsonArray $jsonArray
 ```
+**Title: PowerShell Script for Manipulating JSON Data**
+
+**Explanation:**
+This PowerShell script provides functions for reading, modifying, and writing JSON data. It consists of several functions:
+
+1. **Read-JsonFile:**
+   - Takes a file path as input and reads the content of a JSON file, converting it into a PowerShell object.
+
+2. **Write-JsonFile:**
+   - Accepts a file path and a JSON array, converting the array to JSON format and writing it back to the specified file.
+
+3. **Add-JsonItem:**
+   - Appends a new item to a JSON array.
+
+4. **Edit-JsonItem:**
+   - Edits an item in a JSON array based on a specified name or value. It uses ForEach-Object to iterate through the array and locate the item to be edited.
+
+5. **Remove-JsonItem:**
+   - Deletes an item from a JSON array based on a specified name or value. It utilizes the Where-Object cmdlet to filter out the item to be removed.
+
+The main script section demonstrates the usage of these functions:
+
+- Reads a JSON file specified by `$filePath`.
+- Displays the current JSON array.
+- Adds a new item to the JSON array.
+- Edits an item in the JSON array based on the name "New Item" to "Edited Item" with an updated value.
+- Removes an item from the JSON array based on the name "Some Value."
+- Displays the updated JSON array.
+- Writes the updated JSON array back to the original file.
+
+The script provides a foundation for interactive manipulation of JSON data, showcasing common operations such as adding, editing, and removing items from a JSON array.
