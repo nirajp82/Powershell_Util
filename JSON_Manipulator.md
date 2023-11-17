@@ -238,4 +238,6 @@ The main script section demonstrates the usage of these functions:
 - Displays the updated JSON array.
 - Writes the updated JSON array back to the original file.
 
+- @(...) around the hashtable: This part creates an array containing the hashtable. Even though in this example, there's only one hashtable, it's enclosed in an array. This is useful in scenarios where you might have multiple elements in the array, and it ensures consistency.
+
 The script provides a foundation for interactive manipulation of JSON data, showcasing common operations such as adding, editing, and removing items from a JSON array.
