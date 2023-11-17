@@ -1,3 +1,4 @@
+```ps1
 # Function to read JSON file
 function Read-JsonFile {
     param (
@@ -89,3 +90,4 @@ $jsonArray
 
 # Write the updated JSON array back to the file
 Write-JsonFile -filePath $filePath -jsonArray $jsonArray
+```
