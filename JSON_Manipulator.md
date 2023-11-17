@@ -19,78 +19,195 @@ function Write-JsonFile {
     $jsonArray | ConvertTo-Json | Set-Content -Path $filePath
 }
 
-# Function to add an item to JSON array
-function Add-JsonItem {
+# Function to add an element to JSON array
+function Add-JsonElement {
     param (
         [object]$jsonArray,
-        [object]$item
+        [hashtable]$newElement
     )
 
-    $jsonArray += $item
+    $jsonArray += $newElement
     return $jsonArray
 }
 
-# Function to edit an item in JSON array based on name or value
-function Edit-JsonItem {
+# Function to update an element in JSON array
+function Update-JsonElement {
     param (
         [object]$jsonArray,
-        [string]$searchKey,
+        [string]$searchAttribute,
         [string]$searchValue,
-        [object]$newItem
+        [hashtable]$updatedElement
     )
 
     $jsonArray | ForEach-Object {
-        if ($_.($searchKey) -eq $searchValue) {
-            $_ = $newItem
+        if ($_.($searchAttribute) -eq $searchValue) {
+            $_ = $updatedElement
         }
     }
     return $jsonArray
 }
 
-# Function to delete an item from JSON array based on name or value
-function Remove-JsonItem {
+# Function to remove an element from JSON array
+function Remove-JsonElement {
     param (
         [object]$jsonArray,
-        [string]$searchKey,
+        [string]$searchAttribute,
         [string]$searchValue
     )
 
-    $jsonArray = $jsonArray | Where-Object { $_.($searchKey) -ne $searchValue }
+    $jsonArray = $jsonArray | Where-Object { $_.($searchAttribute) -ne $searchValue }
     return $jsonArray
+}
+
+# Function to list all elements in JSON array
+function List-AllElements {
+    param (
+        [object]$jsonArray
+    )
+
+    $jsonArray
+}
+
+# Function to search for an element in JSON array by attribute
+function Search-JsonElement {
+    param (
+        [object]$jsonArray,
+        [string]$searchAttribute,
+        [string]$searchValue
+    )
+
+    $jsonArray | Where-Object { $_.($searchAttribute) -eq $searchValue }
 }
 
 # Main script
 $filePath = "your_file_path.json"  # Replace with your file path
 $jsonArray = Read-JsonFile -filePath $filePath
 
-# Display current JSON array
-Write-Host "Current JSON Array:"
-$jsonArray
+# Interactive loop
+$continue = $true
 
-# Add an item to the JSON array
-$newItem = @{
-    "Name"  = "New Item";
-    "Value" = "Some Value";
+while ($continue) {
+    $operation = Read-Host "Choose operation (add, update, remove, list, search, exit):"
+
+    switch ($operation) {
+        "add" {
+            $newElement = @{
+                "Name"     = Read-Host "Enter Name:"
+                "Balance"  = Read-Host "Enter Balance:"
+                "Tags"     = @((Read-Host "Enter Tags (comma-separated):") -split ',')
+                "Friends"  = @(@{ "id" = 0; "name" = Read-Host "Enter Friend's Name:" })
+                "Greeting" = Read-Host "Enter Greeting:"
+                "FavoriteFruit" = Read-Host "Enter Favorite Fruit:"
+            }
+            $jsonArray = Add-JsonElement -jsonArray $jsonArray -newElement $newElement
+        }
+        "update" {
+            $searchAttribute = Read-Host "Enter attribute to search by (e.g., Name):"
+            $searchValue = Read-Host "Enter value to search:"
+            $updatedElement = @{
+                "Name"     = Read-Host "Enter Updated Name:"
+                "Balance"  = Read-Host "Enter Updated Balance:"
+                "Tags"     = @((Read-Host "Enter Updated Tags (comma-separated):") -split ',')
+                "Friends"  = @(@{ "id" = 0; "name" = Read-Host "Enter Updated Friend's Name:" })
+                "Greeting" = Read-Host "Enter Updated Greeting:"
+                "FavoriteFruit" = Read-Host "Enter Updated Favorite Fruit:"
+            }
+            $jsonArray = Update-JsonElement -jsonArray $jsonArray -searchAttribute $searchAttribute -searchValue $searchValue -updatedElement $updatedElement
+        }
+        "remove" {
+            $searchAttribute = Read-Host "Enter attribute to search by (e.g., Name):"
+            $searchValue = Read-Host "Enter value to search:"
+            $jsonArray = Remove-JsonElement -jsonArray $jsonArray -searchAttribute $searchAttribute -searchValue $searchValue
+        }
+        "list" {
+            List-AllElements -jsonArray $jsonArray
+        }
+        "search" {
+            $searchAttribute = Read-Host "Enter attribute to search by (e.g., Name):"
+            $searchValue = Read-Host "Enter value to search:"
+            $result = Search-JsonElement -jsonArray $jsonArray -searchAttribute $searchAttribute -searchValue $searchValue
+            if ($result) {
+                Write-Host "Search Result:"
+                $result
+            } else {
+                Write-Host "No matching element found."
+            }
+        }
+        "exit" {
+            $continue = $false
+        }
+        default {
+            Write-Host "Invalid operation. Please enter add, update, remove, list, search, or exit."
+        }
+    }
 }
-$jsonArray = Add-JsonItem -jsonArray $jsonArray -item $newItem
-
-# Edit an item in the JSON array based on name or value
-$editedItem = @{
-    "Name"  = "Edited Item";
-    "Value" = "Updated Value";
-}
-$jsonArray = Edit-JsonItem -jsonArray $jsonArray -searchKey "Name" -searchValue "New Item" -newItem $editedItem
-
-# Remove an item from the JSON array based on name or value
-$jsonArray = Remove-JsonItem -jsonArray $jsonArray -searchKey "Name" -searchValue "Some Value"
-
-# Display updated JSON array
-Write-Host "Updated JSON Array:"
-$jsonArray
 
 # Write the updated JSON array back to the file
 Write-JsonFile -filePath $filePath -jsonArray $jsonArray
 ```
+
+Below are examples of how to use the PowerShell script for each operation:
+
+1. **Add an Element:**
+   - Choose "add" as the operation.
+   - Enter values for the new element's attributes when prompted.
+   ```powershell
+   Choose operation (add, update, remove, list, search, exit): add
+   Enter Name: John Doe
+   Enter Balance: $3,500.00
+   Enter Tags (comma-separated): tag1,tag2
+   Enter Friend's Name: Jane Doe
+   Enter Greeting: Hello, John!
+   Enter Favorite Fruit: Apple
+   ```
+
+2. **Update an Element:**
+   - Choose "update" as the operation.
+   - Enter the attribute and value to search for.
+   - Enter updated values for the found element when prompted.
+   ```powershell
+   Choose operation (add, update, remove, list, search, exit): update
+   Enter attribute to search by (e.g., Name): Name
+   Enter value to search: John Doe
+   Enter Updated Name: John Updated
+   Enter Updated Balance: $4,000.00
+   Enter Updated Tags (comma-separated): tag1,tag3
+   Enter Updated Friend's Name: Jane Updated
+   Enter Updated Greeting: Hello, John Updated!
+   Enter Updated Favorite Fruit: Orange
+   ```
+
+3. **Remove an Element:**
+   - Choose "remove" as the operation.
+   - Enter the attribute and value to search for.
+   ```powershell
+   Choose operation (add, update, remove, list, search, exit): remove
+   Enter attribute to search by (e.g., Name): Name
+   Enter value to search: John Updated
+   ```
+
+4. **List All Elements:**
+   - Choose "list" as the operation.
+   ```powershell
+   Choose operation (add, update, remove, list, search, exit): list
+   ```
+
+5. **Search for an Element:**
+   - Choose "search" as the operation.
+   - Enter the attribute and value to search for.
+   ```powershell
+   Choose operation (add, update, remove, list, search, exit): search
+   Enter attribute to search by (e.g., Name): Name
+   Enter value to search: Jane Doe
+   ```
+
+6. **Exit:**
+   - Choose "exit" as the operation to exit the script.
+   ```powershell
+   Choose operation (add, update, remove, list, search, exit): exit
+   ```
+
+Remember to replace the file path (`"your_file_path.json"`) in the script with the actual path to your JSON file. The script will read the JSON data from the file, perform the chosen operations interactively, and then write the updated JSON data back to the same file.
 **Title: PowerShell Script for Manipulating JSON Data**
 
 **Explanation:**
