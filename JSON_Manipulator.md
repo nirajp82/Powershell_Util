@@ -2,89 +2,89 @@
 # Function to read JSON file
 function Read-JsonFile {
     param (
-        [string]$filePath
+        [string]$filePath  # Specify the file path as a parameter
     )
 
-    $content = Get-Content -Path $filePath -Raw
-    return $content | ConvertFrom-Json
+    $content = Get-Content -Path $filePath -Raw  # Read the content of the file
+    return $content | ConvertFrom-Json  # Convert the content to a PowerShell object
 }
 
 # Function to write JSON array to file
 function Write-JsonFile {
     param (
-        [string]$filePath,
-        [object]$jsonArray
+        [string]$filePath,  # Specify the file path as a parameter
+        [object]$jsonArray  # Specify the JSON array as a parameter
     )
 
-    $jsonArray | ConvertTo-Json | Set-Content -Path $filePath
+    $jsonArray | ConvertTo-Json | Set-Content -Path $filePath  # Convert the array to JSON and write to the file
 }
 
 # Function to add an element to JSON array
 function Add-JsonElement {
     param (
-        [object]$jsonArray,
-        [hashtable]$newElement
+        [object]$jsonArray,    # JSON array to which the element will be added
+        [hashtable]$newElement  # New element to be added to the JSON array
     )
 
-    $jsonArray += $newElement
-    return $jsonArray
+    $jsonArray += $newElement  # Add the new element to the JSON array
+    return $jsonArray  # Return the updated JSON array
 }
 
 # Function to update an element in JSON array
 function Update-JsonElement {
     param (
-        [object]$jsonArray,
-        [string]$searchAttribute,
-        [string]$searchValue,
-        [hashtable]$updatedElement
+        [object]$jsonArray,          # JSON array to be updated
+        [string]$searchAttribute,    # Attribute to search by for updating
+        [string]$searchValue,        # Value to search for
+        [hashtable]$updatedElement   # Updated values for the matching element
     )
 
     $jsonArray | ForEach-Object {
         if ($_.($searchAttribute) -eq $searchValue) {
-            $_ = $updatedElement
+            $_ = $updatedElement  # Update the element if it matches the search criteria
         }
     }
-    return $jsonArray
+    return $jsonArray  # Return the updated JSON array
 }
 
 # Function to remove an element from JSON array
 function Remove-JsonElement {
     param (
-        [object]$jsonArray,
-        [string]$searchAttribute,
-        [string]$searchValue
+        [object]$jsonArray,          # JSON array from which the element will be removed
+        [string]$searchAttribute,    # Attribute to search by for removal
+        [string]$searchValue         # Value to search for
     )
 
-    $jsonArray = $jsonArray | Where-Object { $_.($searchAttribute) -ne $searchValue }
-    return $jsonArray
+    $jsonArray = $jsonArray | Where-Object { $_.($searchAttribute) -ne $searchValue }  # Remove the element based on search criteria
+    return $jsonArray  # Return the updated JSON array
 }
 
 # Function to list all elements in JSON array
 function List-AllElements {
     param (
-        [object]$jsonArray
+        [object]$jsonArray  # JSON array to be listed
     )
 
-    $jsonArray
+    $jsonArray  # Output the entire JSON array
 }
 
 # Function to search for an element in JSON array by attribute
 function Search-JsonElement {
     param (
-        [object]$jsonArray,
-        [string]$searchAttribute,
-        [string]$searchValue
+        [object]$jsonArray,          # JSON array to be searched
+        [string]$searchAttribute,    # Attribute to search by
+        [string]$searchValue         # Value to search for
     )
 
-    $jsonArray | Where-Object { $_.($searchAttribute) -eq $searchValue }
+    $jsonArray | Where-Object { $_.($searchAttribute) -eq $searchValue }  # Search for and return the matching element
 }
 
 # Main script
 $filePath = "your_file_path.json"  # Replace with your file path
-$jsonArray = Read-JsonFile -filePath $filePath
+$jsonArray = Read-JsonFile -filePath $filePath  # Read the JSON array from the file
 
 # Interactive loop
-$continue = $true
+$continue = $true  # Variable to control the interactive loop
 
 while ($continue) {
     $operation = Read-Host "Choose operation (add, update, remove, list, search, exit):"
