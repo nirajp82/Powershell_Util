@@ -41,6 +41,7 @@ function Update-JsonElement {
 
     $jsonArray | ForEach-Object {
         if ($_.($searchAttribute) -eq $searchValue) {
+           # $_ is a special variable that represents the current object in the pipeline. 
             $_ = $updatedElement  # Update the element if it matches the search criteria
         }
     }
@@ -75,7 +76,7 @@ function Search-JsonElement {
         [string]$searchAttribute,    # Attribute to search by
         [string]$searchValue         # Value to search for
     )
-
+   # Where-Object: This cmdlet iterates through each element (represented by $_) in the incoming array and filters the elements based on the condition specified in the script block.
     $jsonArray | Where-Object { $_.($searchAttribute) -eq $searchValue }  # Search for and return the matching element
 }
 
