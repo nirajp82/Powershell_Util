@@ -66,46 +66,26 @@ $jsonArray = Read-JsonFile -filePath $filePath
 Write-Host "Current JSON Array:"
 $jsonArray
 
-# Interactive loop
-$continue = $true
-
-while ($continue) {
-    $operation = Read-Host "Choose operation (add, edit, remove, exit):"
-
-    switch ($operation) {
-        "add" {
-            $newItem = @{
-                "Name"  = Read-Host "Enter Name for new item:"
-                "Value" = Read-Host "Enter Value for new item:"
-            }
-            $jsonArray = Add-JsonItem -jsonArray $jsonArray -item $newItem
-        }
-        "edit" {
-            $searchKey = Read-Host "Enter search key (e.g., Name):"
-            $searchValue = Read-Host "Enter search value:"
-            $editedItem = @{
-                "Name"  = Read-Host "Enter new Name:"
-                "Value" = Read-Host "Enter new Value:"
-            }
-            $jsonArray = Edit-JsonItem -jsonArray $jsonArray -searchKey $searchKey -searchValue $searchValue -newItem $editedItem
-        }
-        "remove" {
-            $searchKey = Read-Host "Enter search key (e.g., Name):"
-            $searchValue = Read-Host "Enter search value:"
-            $jsonArray = Remove-JsonItem -jsonArray $jsonArray -searchKey $searchKey -searchValue $searchValue
-        }
-        "exit" {
-            $continue = $false
-        }
-        default {
-            Write-Host "Invalid operation. Please enter add, edit, remove, or exit."
-        }
-    }
-
-    # Display updated JSON array
-    Write-Host "Updated JSON Array:"
-    $jsonArray
+# Add an item to the JSON array
+$newItem = @{
+    "Name"  = "New Item";
+    "Value" = "Some Value";
 }
+$jsonArray = Add-JsonItem -jsonArray $jsonArray -item $newItem
 
-# Write the final JSON array back to the file
+# Edit an item in the JSON array based on name or value
+$editedItem = @{
+    "Name"  = "Edited Item";
+    "Value" = "Updated Value";
+}
+$jsonArray = Edit-JsonItem -jsonArray $jsonArray -searchKey "Name" -searchValue "New Item" -newItem $editedItem
+
+# Remove an item from the JSON array based on name or value
+$jsonArray = Remove-JsonItem -jsonArray $jsonArray -searchKey "Name" -searchValue "Some Value"
+
+# Display updated JSON array
+Write-Host "Updated JSON Array:"
+$jsonArray
+
+# Write the updated JSON array back to the file
 Write-JsonFile -filePath $filePath -jsonArray $jsonArray
