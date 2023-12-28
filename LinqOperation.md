@@ -1,5 +1,6 @@
 # https://www.red-gate.com/simple-talk/development/dotnet-development/high-performance-powershell-linq/
 
+```ps
 $data = 0..10
 
 # Load System.Core assembly for LINQ support
@@ -21,8 +22,10 @@ $filteredData = [System.Linq.Enumerable]::Where($intdata, [Func[int,bool]]{ para
 $filteredData | ForEach-Object {
     Write-Host $_
 }
+```
 
 ##########
+```ps
 class Person
 {
     [string] $SSN;
@@ -53,3 +56,4 @@ foreach ($k in $keys) {
 	$k 
 #	$dict[$k]
 }
+```ps
