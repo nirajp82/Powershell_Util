@@ -23,6 +23,7 @@ and not via Windows Store as it only installs on the CurrentUser privilege.
 - Import-Module posh-git
 - Import-Module oh-my-posh
 - Set-PoshPrompt -Theme Paradox
+- Install the font: https://www.nerdfonts.com/font-downloads (Cascadia Code, Nerd Font)
 
 
 *********
