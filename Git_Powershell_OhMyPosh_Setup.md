@@ -10,7 +10,6 @@
 - >> Install-Module oh-my-posh -Scope CurrentUser
   * oh-my-posh : The term 'oh-my-posh' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:1
     + oh-my-posh init pwsh | Invoke-Expression
-    + ~~~~~~~~~~
     + CategoryInfo          : ObjectNotFound: (oh-my-posh:String) [], CommandNotFoundException
     + FullyQualifiedErrorId : CommandNotFoundException
 
