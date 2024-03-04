@@ -33,7 +33,8 @@ Powershell Profile
 - Import-Module posh-git
 - -Module oh-my-posh
 - #Set-PoshPrompt -Theme Paradox
-- Set-PoshPrompt C:\Users\DEV\Documents\PowerShell\Themes\npatel.omp.json #https://github.com/nirajp82/Powershell_Util/blob/main/theme/npatel.omp.json
+- Set-PoshPrompt C:\Users\DEV\Documents\PowerShell\Themes\npatel.omp.json
+  - https://github.com/nirajp82/Powershell_Util/blob/main/theme/npatel.omp.json
 - # Produce UTF-8 by default
 - # https://news.ycombinator.com/item?id=12991690
 - $PSDefaultParameterValues["Out-File:Encoding"] = "utf8"
