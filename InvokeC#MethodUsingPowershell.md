@@ -1,22 +1,10 @@
-1. A sample C# class (`MyClass.cs`)
-2. The PowerShell script to:
+# Sample: Load .NET DLL and Use Class with Multiple Constructors via PowerShell
 
-   * Load the DLL using `LoadFrom`
-   * Instantiate the class
-   * Include detailed comments and notes
+This guide demonstrates how to load a .NET DLL and instantiate a class that has multiple constructors using PowerShell.
 
 ---
 
-### 📄 `SampleUsage.md`
-
-````markdown
-# Sample: Using PowerShell to Load a .NET DLL and Create an Object
-
-This guide shows how to create a simple .NET class, compile it into a DLL, and then load and instantiate it from PowerShell using both `Assembly::LoadFrom` and `[Activator]::CreateInstance`.
-
----
-
-## 1. ✅ Sample C# Class (`MyClass.cs`)
+## 1. ✅ Sample C# Class with Multiple Constructors (`MyClass.cs`)
 
 ```csharp
 // File: MyClass.cs
@@ -27,15 +15,32 @@ namespace MyLibrary
     public class MyClass
     {
         public string Message { get; }
+        public int Count { get; }
 
+        // Default constructor
+        public MyClass()
+        {
+            Message = "Default constructor";
+            Count = 0;
+        }
+
+        // Constructor with one string parameter
         public MyClass(string message)
         {
             Message = message;
+            Count = 0;
+        }
+
+        // Constructor with string and int
+        public MyClass(string message, int count)
+        {
+            Message = message;
+            Count = count;
         }
 
         public void ShowMessage()
         {
-            Console.WriteLine("Message from MyClass: " + Message);
+            Console.WriteLine($"Message: {Message}, Count: {Count}");
         }
     }
 }
@@ -43,7 +48,7 @@ namespace MyLibrary
 
 ### 🛠️ Compile Instructions
 
-Use the following command in Developer Command Prompt to compile:
+Compile into a DLL using:
 
 ```bash
 csc -target:library -out:MyLibrary.dll MyClass.cs
@@ -51,19 +56,18 @@ csc -target:library -out:MyLibrary.dll MyClass.cs
 
 ---
 
-## 2. ⚙️ PowerShell Script
+## 2. ⚙️ PowerShell Script to Use Multiple Constructors
 
 ```powershell
 # ------------------------------
-# Load .NET Assembly from path
+# Load the assembly
 # ------------------------------
 $cloudCoreDllPath = "C:\Path\To\MyLibrary.dll"
 [System.Reflection.Assembly]::LoadFrom($cloudCoreDllPath)
 
-# ----------------------------------------
-# Get the type from the loaded assembly
-# This is safer than relying on [Type]::GetType()
-# ----------------------------------------
+# ------------------------------
+# Get the type from the assembly
+# ------------------------------
 $typeName = "MyLibrary.MyClass"
 $assembly = [System.AppDomain]::CurrentDomain.GetAssemblies() |
     Where-Object { $_.GetTypes() -match $typeName } |
@@ -75,42 +79,62 @@ if (-not $assembly) {
 
 $type = $assembly.GetType($typeName)
 
-# ----------------------------------------
-# Create an instance using constructor with parameter
-# ----------------------------------------
-$param = "Hello from PowerShell"
-$instance = [Activator]::CreateInstance($type, @($param))
+# ------------------------------
+# Example 1: Use default constructor
+# ------------------------------
+$instance1 = [Activator]::CreateInstance($type)
+$instance1.ShowMessage()
 
-# ----------------------------------------
-# Call a method on the object
-# ----------------------------------------
-$instance.ShowMessage()
+# ------------------------------
+# Example 2: Use constructor with one string parameter
+# ------------------------------
+$instance2 = [Activator]::CreateInstance($type, @("Hello from PowerShell"))
+$instance2.ShowMessage()
+
+# ------------------------------
+# Example 3: Use constructor with string and int
+# ------------------------------
+$instance3 = [Activator]::CreateInstance($type, @("Multi-param", 42))
+$instance3.ShowMessage()
 ```
 
 ---
 
-## 3. 📌 Notes
+## 3. 📌 Notes on Constructor Selection
 
-* `Assembly::LoadFrom()` loads the assembly from a specific file path.
-* `New-Object` might not work reliably after loading assemblies dynamically — prefer `[Activator]::CreateInstance()` for better compatibility.
-* You can extend this by using reflection to inspect available constructors, properties, or methods.
-
----
-
-## ✅ Output (When Run)
-
-```
-Message from MyClass: Hello from PowerShell
-```
+* `[Activator]::CreateInstance(type, parameters)` chooses the constructor based on parameter **count and type**.
+* Make sure the parameter order and types match the constructor exactly.
+* You can also use reflection for advanced matching (e.g., to pick optional constructors or named parameters).
 
 ---
 
-## 📎 Related Links
-
-* [Activator.CreateInstance Documentation](https://learn.microsoft.com/en-us/dotnet/api/system.activator.createinstance)
-* [PowerShell New-Object](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/new-object)
+## ✅ Output When Run
 
 ```
+Message: Default constructor, Count: 0
+Message: Hello from PowerShell, Count: 0
+Message: Multi-param, Count: 42
+```
 
-Let me know if you'd like a version with multiple constructors, or to show use of `New-Object` side-by-side for learning!
+---
+
+## 🧠 Optional: Find Constructors with Reflection
+
+To list all available constructors:
+
+```powershell
+$constructors = $type.GetConstructors()
+foreach ($ctor in $constructors) {
+    $params = $ctor.GetParameters() | ForEach-Object { "$($_.ParameterType.Name) $_.Name" }
+    Write-Host "Constructor: ($($params -join ', '))"
+}
+```
+
+---
+
+## 📎 References
+
+* [System.Activator.CreateInstance](https://learn.microsoft.com/en-us/dotnet/api/system.activator.createinstance)
+* [Reflection in PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/reflection-in-powershell)
+
 ```
